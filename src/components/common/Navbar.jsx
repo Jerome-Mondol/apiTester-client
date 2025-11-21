@@ -44,7 +44,9 @@ export default function Navbar() {
         </div>
 
         {/* CTA - Desktop */}
+
         <div className="hidden md:block">
+        <Link to={'/sign-up'} >
           <button
             className="
               bg-white/10 text-white 
@@ -56,6 +58,7 @@ export default function Navbar() {
           >
             Join Now
           </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -86,7 +89,7 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <button
+            <Link to={'/sign-up'}><button
               className="
                 bg-white/10 text-white 
                 px-4 py-2 rounded-xl 
@@ -96,7 +99,7 @@ export default function Navbar() {
               "
             >
               Join Now
-            </button>
+            </button></Link>
           </div>
         </div>
       )}

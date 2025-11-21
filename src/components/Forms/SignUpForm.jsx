@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
+import { Link } from "react-router";
 
 export default function SignUpForm() {
   const { signup, user } = useAuth();
@@ -118,9 +119,9 @@ export default function SignUpForm() {
 
           <div className="flex justify-center text-white/50 text-sm mt-2">
             Already have an account?
-            <a href="#" className="ml-1 hover:text-white/80 transition font-medium">
+            <Link to={'/login'} ><span className="ml-1 hover:text-white/80 transition font-medium">
               Log In
-            </a>
+            </span></Link>
           </div>
         </form>
       </motion.div>

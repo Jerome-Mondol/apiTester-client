@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
+import { Link } from "react-router";
 
 export default function LoginForm() {
   const { login } = useAuth();
@@ -8,22 +9,25 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // loading state
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       await login(email, password);
       console.log("Logged in!");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen px-6 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
-
       {/* Background Orbs */}
       <motion.div
         className="absolute top-10 left-1/4 w-48 h-48 md:w-72 md:h-72 bg-purple-600/10 rounded-full filter blur-3xl animate-slowSpin"
@@ -62,17 +66,11 @@ export default function LoginForm() {
           Sign in to continue to Vector
         </p>
 
-        {/* Error message */}
         {error && (
-          <p className="text-red-400 text-sm text-center -mt-3">
-            {error}
-          </p>
+          <p className="text-red-400 text-sm text-center -mt-4">{error}</p>
         )}
 
-        {/* FORM HERE */}
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
-
-          {/* Email */}
           <input
             type="email"
             value={email}
@@ -81,8 +79,6 @@ export default function LoginForm() {
             className="bg-white/5 text-white placeholder-white/50 px-4 py-3 rounded-xl border border-white/10 backdrop-blur-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition"
             required
           />
-
-          {/* Password */}
           <input
             type="password"
             value={password}
@@ -92,17 +88,40 @@ export default function LoginForm() {
             required
           />
 
-          {/* Button */}
+          {/* Button with spinner */}
           <button
             type="submit"
-            className="bg-white/10 text-white py-3 rounded-xl border border-white/20 backdrop-blur-xl hover:bg-white/20 transition font-semibold"
+            className="relative bg-white/10 text-white py-3 rounded-xl border border-white/20 backdrop-blur-xl hover:bg-white/20 transition font-semibold flex justify-center items-center gap-2"
+            disabled={loading}
           >
+            {loading && (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            )}
             Log In
           </button>
 
           <div className="flex justify-between text-white/50 text-sm mt-2">
             <a href="#" className="hover:text-white/80 transition">Forgot password?</a>
-            <a href="#" className="hover:text-white/80 transition">Sign Up</a>
+            <Link to={'/sign-up'} ><span className="hover:text-white/80 transition">Sign Up</span></Link>
           </div>
         </form>
       </motion.div>
