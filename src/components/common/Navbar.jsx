@@ -36,7 +36,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8">
           {navElements.map(({ tag, path }, i) => (
             <Link key={i} to={path}>
-              <span className="text-white/70 hover:text-white transition">
+              <span className="text-white/90 hover:text-white transition">
                 {tag}
               </span>
             </Link>

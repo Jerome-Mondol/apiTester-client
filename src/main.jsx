@@ -4,11 +4,12 @@ import './index.css'
 import { Theme } from '@radix-ui/themes'
 import { RouterProvider } from 'react-router/dom'
 import { router } from './router/router.js'
+import { AuthProvider } from './context/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
     <Theme>
-      <RouterProvider router={router} />
+      <AuthProvider >
+        <RouterProvider router={router} />
+      </AuthProvider>
     </Theme>
-  </StrictMode>,
 )
