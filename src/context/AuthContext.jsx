@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { 
+import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
   updateProfile
 } from "firebase/auth";
-import { auth } from "../firebase/firebase.init.js";
+import { auth, db } from "../firebase/firebase.init.js";
+import { doc, setDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -24,12 +25,26 @@ export function AuthProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
+
   // Sign up
   const signup = async (email, password, fullName) => {
+    // creating user
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
+    // updating username
     if (fullName) {
       await updateProfile(userCred.user, { displayName: fullName });
     }
+    
+    const userUID = userCred.user.uid;
+    // saving user in firestore
+    await setDoc(doc(db, "users", userUID), {
+      uid: userUID,
+      fullName,
+      email,
+      createdAt: new Date()
+    })
+
     return userCred;
   };
 
