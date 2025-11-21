@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const { login } = useAuth();
@@ -19,6 +20,7 @@ export default function LoginForm() {
     try {
       await login(email, password);
       console.log("Logged in!");
+      toast.success("Logged in successfully");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -30,27 +32,19 @@ export default function LoginForm() {
     <section className="relative flex flex-col items-center justify-center min-h-screen px-6 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
       {/* Background Orbs */}
       <motion.div
-        className="absolute top-10 left-1/4 w-48 h-48 md:w-72 md:h-72 bg-purple-600/10 rounded-full filter blur-3xl animate-slowSpin"
+        className="absolute top-10 left-1/6 w-48 h-48 md:w-72 md:h-72 bg-purple-600/10 rounded-full filter blur-3xl animate-slowSpin"
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 60, ease: "linear" }}
       />
+      
       <motion.div
-        className="absolute top-1/2 right-1/4 md:right-1/3 w-64 h-64 md:w-80 md:h-80 bg-blue-400/10 rounded-full filter blur-3xl animate-slowSpin"
+        className="absolute top-100 right-1/2 md:right-1/3 w-64 h-64 md:w-80 md:h-80 bg-blue-400/10 rounded-full filter blur-3xl animate-slowSpin"
         animate={{ rotate: -360 }}
         transition={{ repeat: Infinity, duration: 80, ease: "linear" }}
       />
 
       {/* Floating lines */}
-      <motion.div
-        className="absolute top-1/3 left-1/2 w-[1px] md:w-[2px] h-16 md:h-24 bg-purple-400/10 rounded-full"
-        animate={{ y: [0, 15, 0] }}
-        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-20 right-1/4 w-[1px] md:w-[2px] h-24 md:h-32 bg-blue-400/10 rounded-full"
-        animate={{ y: [0, -15, 0] }}
-        transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-      />
+      
 
       {/* Login Card */}
       <motion.div

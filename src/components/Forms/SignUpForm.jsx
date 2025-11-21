@@ -2,16 +2,17 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router";
+import toast from "react-hot-toast";
 
 export default function SignUpForm() {
   const { signup, user } = useAuth();
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // new loading state
+  const [loading, setLoading] = useState(false);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true); // start loading
+    setLoading(true);
 
     const form = e.target;
     const fullName = form.name.value;
@@ -28,6 +29,7 @@ export default function SignUpForm() {
     try {
       const newUser = await signup(email, password, fullName);
       console.log(newUser);
+      toast.success("Signed up successfully")
     } catch (err) {
       setError(err.message);
     } finally {

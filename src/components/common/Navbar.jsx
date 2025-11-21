@@ -1,29 +1,26 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { HamburgerMenuIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const navElements = [
-    { tag: "Home", path: "/" },
-    { tag: "Docs", path: "/docs" },
-    { tag: "Github", path: "/github" },
-  ];
+  const handleLogout = async () => {
+    await logout();
+    navigate("/"); // redirect to home after logout
+  };
+
+  // Dynamic nav elements based on login state
+  const navElements = user
+    ? [{ tag: "Dashboard", path: "/dashboard" }, { tag: "Docs", path: "/docs" }, { tag: "Github", path: "/github" }]
+    : [{ tag: "Home", path: "/" }, { tag: "Docs", path: "/docs" }, { tag: "Github", path: "/github" }];
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 px-5">
-      <nav
-        className="
-          mx-auto max-w-7xl
-          bg-white/5 backdrop-blur-xl
-          border border-white/10
-          rounded-2xl
-          px-6 py-3 mt-4
-          flex items-center justify-between
-          shadow-[0_0_25px_-10px_rgba(0,0,0,0.7)]
-        "
-      >
+      <nav className="mx-auto max-w-7xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-3 mt-4 flex items-center justify-between shadow-[0_0_25px_-10px_rgba(0,0,0,0.7)]">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="h-3 w-3 rounded-full bg-white"></div>
@@ -36,52 +33,38 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8">
           {navElements.map(({ tag, path }, i) => (
             <Link key={i} to={path}>
-              <span className="text-white/90 hover:text-white transition">
-                {tag}
-              </span>
+              <span className="text-white/90 hover:text-white transition">{tag}</span>
             </Link>
           ))}
         </div>
 
         {/* CTA - Desktop */}
-
         <div className="hidden md:block">
-        <Link to={'/sign-up'} >
-          <button
-            className="
-              bg-white/10 text-white 
-              px-4 py-1.5 rounded-xl 
-              border border-white/20 
-              hover:bg-white/20 
-              transition
-            "
-          >
-            Join Now
-          </button>
-          </Link>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="bg-white/10 text-white px-4 py-1.5 rounded-xl border border-white/20 hover:bg-white/20 transition"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link to={"/sign-up"}>
+              <button className="bg-white/10 text-white px-4 py-1.5 rounded-xl border border-white/20 hover:bg-white/20 transition">
+                Join Now
+              </button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-white"
-        >
+        <button onClick={() => setOpen(!open)} className="md:hidden text-white">
           {open ? <Cross2Icon width={24} height={24} /> : <HamburgerMenuIcon width={24} height={24} />}
         </button>
       </nav>
 
       {/* Mobile Menu */}
       {open && (
-        <div
-          className="
-            md:hidden
-            bg-white/5 backdrop-blur-xl
-            border border-white/10
-            rounded-2xl
-            mt-2 mx-4 p-4
-            animate-fadeIn
-          "
-        >
+        <div className="md:hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl mt-2 mx-4 p-4 animate-fadeIn">
           <div className="flex flex-col gap-4">
             {navElements.map(({ tag, path }, i) => (
               <Link key={i} to={path} onClick={() => setOpen(false)}>
@@ -89,17 +72,20 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <Link to={'/sign-up'}><button
-              className="
-                bg-white/10 text-white 
-                px-4 py-2 rounded-xl 
-                border border-white/20 
-                hover:bg-white/20 
-                transition
-              "
-            >
-              Join Now
-            </button></Link>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="bg-white/10 text-white px-4 py-2 rounded-xl border border-white/20 hover:bg-white/20 transition"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link to={"/sign-up"}>
+                <button className="bg-white/10 text-white px-4 py-2 rounded-xl border border-white/20 hover:bg-white/20 transition">
+                  Join Now
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       )}
