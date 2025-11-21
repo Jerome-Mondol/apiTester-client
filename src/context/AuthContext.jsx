@@ -9,6 +9,7 @@ import {
 import { auth, db } from "../firebase/firebase.init.js";
 import { doc, setDoc } from "firebase/firestore";
 import { axiosInstance } from "../axios/axios.js";
+import toast from "react-hot-toast";
 
 const AuthContext = createContext();
 
@@ -27,7 +28,8 @@ export function AuthProvider({ children }) {
       return res.data.token;
     }
     catch (err) {
-      console.error(err)
+      toast.error(err.message)
+      return null;
     }
   }
 
@@ -46,40 +48,63 @@ export function AuthProvider({ children }) {
 
   // Sign up
   const signup = async (email, password, fullName) => {
-    // creating user
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    try {
+      // 1️⃣ Create Firebase user
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
-    // updating username
-    if (fullName) {
-      await updateProfile(userCred.user, { displayName: fullName });
+      // 2️⃣ Update display name
+      if (fullName) {
+        await updateProfile(userCred.user, { displayName: fullName });
+      }
+
+      const { uid, email: userEmail } = userCred.user;
+
+      // 3️⃣ Get JWT first (important: do it before Firestore)
+      const jwtToken = await getJWT(uid, userEmail);
+      if (!jwtToken) throw new Error("JWT creation failed");
+
+      // 4️⃣ Save user in Firestore
+      await setDoc(doc(db, "users", uid), {
+        uid,
+        fullName,
+        email: userEmail,
+        createdAt: new Date()
+      });
+
+      // 5️⃣ Store JWT
+      localStorage.setItem("jwt", jwtToken);
+
+      return userCred;
+
+    } catch (err) {
+      // ❌ If any step fails, rollback: delete Firebase user
+      if (auth.currentUser) {
+        await auth.currentUser.delete().catch(() => { }); // ignore deletion errors
+      }
+      // toast.error(err.message || "Signup failed");
+      throw err; // propagate the error
     }
-
-    const { uid, email: userEmail } = userCred.user;
-    // saving user in firestore
-    await setDoc(doc(db, "users", uid), {
-      uid,
-      fullName,
-      email,
-      createdAt: new Date()
-    })
-
-    // Set jwt token
-    const jwtToken = await getJWT(uid, email);
-    localStorage.setItem("jwt", jwtToken);
-
-    return userCred;
   };
+
 
   // Login
   const login = async (email, password) => {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    const { uid, email: userEmail } = userCred.user;
+    try {
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      const { uid, email: userEmail } = userCred.user;
 
-    const jwtToken = await getJWT(uid, email);
-    localStorage.setItem("jwt", jwtToken)
+      const jwtToken = await getJWT(uid, userEmail);
+      if (!jwtToken) throw new Error("JWT creation failed");
 
-    return userCred;
+      localStorage.setItem("jwt", jwtToken);
+
+      return userCred;
+    } catch (err) {
+      // toast.error(err.message || "Login failed");
+      throw err;
+    }
   };
+
 
   // Logout
   const logout = async () => {
