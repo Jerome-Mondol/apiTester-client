@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 
 export default function SignUpForm() {
   const { signup, user } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -27,13 +29,12 @@ export default function SignUpForm() {
     }
 
     try {
-      const newUser = await signup(email, password, fullName);
-      console.log(newUser);
-      toast.success("Signed up successfully")
+      await signup(email, password, fullName);
+      navigate('/');
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false);
     }
   };
 

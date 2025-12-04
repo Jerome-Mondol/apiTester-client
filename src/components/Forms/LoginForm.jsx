@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const { login } = useAuth();
+
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,9 +20,8 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      await login(email, password);
-      console.log("Logged in!");
-      toast.success("Logged in successfully");
+      await login(email, password);      
+      navigate('/')
     } catch (err) {
       setError(err.message);
     } finally {

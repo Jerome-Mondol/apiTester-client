@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 
 const AuthContext = createContext();
 
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -73,7 +74,7 @@ export function AuthProvider({ children }) {
 
       // 5️⃣ Store JWT
       localStorage.setItem("jwt", jwtToken);
-
+      toast.success("Signed up successfully")
       return userCred;
 
     } catch (err) {
@@ -97,7 +98,7 @@ export function AuthProvider({ children }) {
       if (!jwtToken) throw new Error("JWT creation failed");
 
       localStorage.setItem("jwt", jwtToken);
-
+      toast.success("Logged in successfully");
       return userCred;
     } catch (err) {
       // toast.error(err.message || "Login failed");
