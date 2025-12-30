@@ -1,16 +1,63 @@
-# React + Vite
+# API Tester
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the **API Tester** app! 🚀  
+This is a simple application I built to learn and understand how APIs work, how data is fetched, and how to implement authentication and secure communication between the front-end and back-end.
 
-Currently, two official plugins are available:
+### What I Learned
+Through this project, I gained hands-on experience with **API integration**, **authentication**, and **handling data requests** using various tools and technologies. This project helped me solidify my understanding of working with RESTful APIs and handling data flows in a full-stack application.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
+- **API Testing:** Easily test different API endpoints to send and receive data.
+- **User Authentication:** Secure authentication using **Firebase** authentication for signing up, logging in, and handling sessions.
+- **Real-Time Data Fetching:** Fetch data from the server using **Axios** and update the UI in real-time.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🔧 Tech Stack
+- **Frontend:**  
+  - React  
+  - TailwindCSS  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Backend:**  
+  - Express  
+  - MongoDB  
+  - Node.js  
+  - JWT (JSON Web Tokens) for authentication  
+
+- **Authentication:**  
+  - Firebase Authentication
+
+- **Tools:**  
+  - Git  
+  - Axios  
+
+---
+
+## 🔗 Links
+- **Live Link (Client):** [API Tester Client](https://api-tester-client.vercel.app/)
+- **Server GitHub Repo:** [API Tester Server](https://github.com/Jerome-Mondol/apiTester-server)
+- **Client GitHub Repo:** [API Tester Client](https://github.com/Jerome-Mondol/apiTester-client)
+
+---
+
+## 📸 Screenshots
+
+![API Tester App Screenshot](link-to-your-screenshot.jpg)  
+
+
+---
+
+## 💡 Future Enhancements
+- Add more robust error handling and validation.
+- Improve user interface with more interactivity.
+- Implement better state management for large data flows.
+
+---
+
+## 📝 How to Run Locally
+1. Clone both the **Client** and **Server** repositories:
+   ```bash
+   git clone https://github.com/Jerome-Mondol/apiTester-client.git
+   git clone https://github.com/Jerome-Mondol/apiTester-server.git
